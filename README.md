@@ -1,5 +1,7 @@
-mass-text: an App Engine-hosted Twilio frontend for sending large quantities of a single message to several recipients.
+mass-text: send an SMS to several recipients
 =========
+
+mass-text is an App Engine-hosted Twilio frontend for sending large quantities of a single message to several recipients.
 
 This app was whipped up in a weekend; it's not pretty, it's not robust, it's not anything but barely functional.
 
@@ -7,12 +9,14 @@ Functionality
 -------------
 
 To set up your own app:
+
 1. Create a [Google App Engine](http://appengine.google.com) app.
 2. Update `app.yaml` to point to your new app id.
 3. Update the `LOCALHOST` parameter in `main.py` to point to your app. (Like I said, it's not pretty.)
 4. Deploy and enjoy.
 
 To use:
+
 1. Create a [Twilio](http://twilio.com) account.
 2. Visit the main page of your newly-deployed app.
 3. Follow the (admittedly spare) instructions.
