@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Mass Texter{% endblock %}
+
+{% block content %}
+<h3>Send a new text to many numbers</h3>
+
+<p><em>Your message will be sent from</em> <strong>{{ data.From }}</strong> (<a href="/account/new">change</a>)</p>
+
+{% if err %}
+<p style="color: red;">{{ err }}</p>
+{% endif %}
+
+<form action="/dotext" method="POST">
+  <p>Your Message:<br><textarea name="message" cols=80 rows=2>{{ message|default:"" }}</textarea></p>
+  <p>Recipient List:<br><textarea name="recipients" cols=15 rows=20>{{ recipients|default:"" }}</textarea></p>
+  <input type="submit">
+</form>
+
+<p>You have recently sent the following {{ ops|length }} text{{ ops|length|pluralize }}. (<a href="?all=1">Show all.</a>)</p>
+
+<table>
+  <tr><th>Date</th><th>Message</th><th>Recipient Count</th></tr>
+  {% for op in ops %}
+  <tr><td><a href="/watch?id={{ op.key }}">{{ op.created }}</a></td><td>{{ op.message }}</td><td>{{ op.recipientList|length }}</td></tr>
+  {% endfor %}
+</table>
+
+
+
+{% endblock %}

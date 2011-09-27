@@ -1,0 +1,12 @@
+<html>
+<head>
+  <title>{% block title %}Mass Texter{% endblock %}</title>
+  {% block head %}{% endblock %}
+</head>
+<body>
+  {% if username %}
+  <div id="loginblock">Welcome, {{ username }}! (Not you? <a href="{{ logouturl }}">Log out</a>)</div>
+  {% endif %}
+  {% block content %}Page not found...sorry!{% endblock %}
+</body>
+</html>

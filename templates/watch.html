@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Mass Texter : watch a text{% endblock %}
+
+{% block head %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script type="text/javascript">
+var textOpKey = "{{ op.key }}";
+var lastModified = "{{ lastModified }}";
+function prettyDate(d) {
+  return d.toLocaleString()
+}
+
+function update() {
+  $.get('/watch.json', {id:textOpKey, lastModified: lastModified}, function(data) {
+    if (data.redirect) {
+      window.location.href = data.redirect;
+      return;
+    }
+    if (data.results.length > 0 && data.lastModified) {
+      lastModified = data.lastModified;
+    }
+    $.each(data.results, function(index, value) {
+      var row = $('tr#'+value.key)
+      if (row.size() == 0) {
+        row = $('<tr id="'+value.key+'">')
+        row.append('<td>'+value.recipient+'</td>')
+        row.append('<td class="status">')
+        row.append('<td class="modified">')
+        $('table#results').append(row)
+      }
+      row.find('td.status').html(value.status)
+      row.find('td.modified').html(prettyDate(new Date(value.modified/1000)))
+    });
+  }, 'json');
+}
+$(function() {
+  setTimeout(update, 1000);
+  setInterval(update, 5000);
+  $('td.modified').each(function(index, obj) {
+    $(obj).text(prettyDate(new Date(Number($(obj).text())/1000)));
+  })
+});
+</script>
+{% endblock %}
+
+{% block content %}
+{% with op.recipientList|length as count %}
+  <p>Showing text of message "{{ op.message }}" to {{ count }} recipient{{ count|pluralize }}.</p>
+{% endwith %}  
+
+<p><a href="/">&laquo; Return to main page</a></p>
+
+<table id="results">
+  <tr><th>Phone number</th><th>Status</th><th>Last updated</th></tr>
+  {% for result in results %}
+  <tr id="{{ result.key }}">
+    <td>{{ result.recipient }}</td>
+    <td class="status">{{ result.status }}</td>
+    <td class="modified">{{ result.modified }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

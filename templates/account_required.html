@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Mass Texter : Account Required{% endblock %}
+
+{% block content %}
+<p>Please create an account on <a href="http://twilio.com">twilio</a> and enter your credentials below.</p>
+
+{% if error %}
+  <p style="color: red; clear:both">{{ error }}</p>
+{% endif %}
+
+<div style="text-align: right; float: left">
+  <form method="post" action="/account/new">
+    Twilio SID: <input name="SID" type=text size=50 value="{{ data.SID|default:"" }}"><br>
+    Twilio Auth: <input name="AUTH" type=text size=50 value="{{ data.AUTH|default:"" }}"><br>
+    {% if numbers %}
+    Twilio phone number: <select name="From">
+      {% for number in numbers %}
+      <option {% if number|last == data.From %}selected=selected{% endif %} value="{{ number|last }}">{{ number|first }}</option>
+      {% endfor %}</select><br>
+    {% endif %}
+    Text message autoresponse: <textarea name="TextAutoResponse" cols=40 rows=3>{{ data.TextAutoResponse|default:"Hi, Splash here. This phone number is only used to send text messages. Please text XXX-YYY-ZZZZ to reach a human. Thanks!"}}</textarea><br>
+    Voice call autoresponse: <textarea name="VoiceAutoResponse" cols=40 rows=3>{{ data.VoiceAutoResponse|default:"Hello, thanks for calling Splash. This phone number is only used to send text messages. Please call XXX-YYY-ZZZZ to reach a human being. Thanks!"}}</textarea><br>
+    <input type="submit">
+  </form>
+</div>
+
+<p style="clear: both;">Note: This application will redirect all communication with your Twilio phone number to this application.</p>
+
+{% endblock %}
